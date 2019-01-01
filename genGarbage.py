@@ -15,15 +15,18 @@ def randWord(letterList,wordLengths):
 	return word
 
 def genGarbage(numGarbage):
-	outputFile = open("notWords.txt","w+")
+
 	realWordFile = open("parsedWords.txt", "r")
 	realWords = realWordFile.readlines()
+	realWordFile.close()
+	outputFile = open("notWords.txt","w+")
+	print (realWords[0:20])
 	for word in range(0,numGarbage):
 		#write a word to the file
-
-		while (word in realWords):
-			print ('create a real word!')
-			word = randWord(letters, wordLength + "\n")
+		wordToAdd = randWord(letters, wordLength) + "\n"
+		while (wordToAdd in realWords):
+			print ('created a real word!', wordToAdd)
+			wordToAdd = randWord(letters, wordLength) + "\n"
 
 		outputFile.write(randWord(letters, wordLength) + "\n")
 
@@ -99,6 +102,7 @@ for testWord in range(0,len(test)):
 	test[testWord] = test[testWord].lower()
 print (test)
 '''
-fileToLower('parsedWords.txt')
+#fileToLower('parsedWords.txt')
 genGarbage(200)
+
 #removePunct('allWords.txt', 'parsedWords.txt', nonChars)
