@@ -1,5 +1,6 @@
 import math
 import random
+import time
 
 letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','m','o','p','q','r','s','t','u','v','w','x','y','z']
 wordLength = [2,8]
@@ -15,31 +16,43 @@ def randWord(letterList,wordLengths):
 
 def genGarbage(numGarbage):
 	outputFile = open("notWords.txt","w+")
+	realWordFile = open("parsedWords.txt", "r")
+	realWords = realWordFile.readlines()
 	for word in range(0,numGarbage):
 		#write a word to the file
+
+		while (word in realWords):
+			print ('create a real word!')
+			word = randWord(letters, wordLength + "\n")
+
 		outputFile.write(randWord(letters, wordLength) + "\n")
+
 	outputFile.close()
 
-def removePunct(inputFile,outputFile, badChars):
+def removePunct(inputFile, outputFile, badChars):
 	wordFile = open(inputFile, 'r')
 	outFile = open(outputFile, 'w+')
 	words = wordFile.readlines(0)
-	print (len(words))
-	for word in words:
-		if (len(word) > 8):
-			print('removing', word)
-			words.remove(word)
-			
-	for word in words:
+	print ('PREPROCESSED', len(words))
+	time.sleep(2)
+	word = 0
+	while (word < len(words)):
+		if (len(words[word]) > 8):
+			print('removing', words[word])
+			words.remove(words[word])
+			word -= 1
+		word += 1
+	print ('AFTER length',len(words))
+	time.sleep(2)
+	word = 0
+	while (word < len(words)):
 		for char in badChars:
-			if (char in word):
-				print('removing', word)
-				words.remove(word)
+			if (char in words[word]):
+				print('removing', words[word])
+				words.remove(words[word])
+				word -= 1
 				break
-		else:
-			continue
-		break
-	
+		word += 1
 	wordFile.close()
 	print (len(words))
 	for word in words:
@@ -47,11 +60,45 @@ def removePunct(inputFile,outputFile, badChars):
 	outFile.close()
 
 
+def fileToLower(lowerFile):
+	wordFile = open(lowerFile, 'r')
+	wordsInFile = wordFile.readlines()
+	wordFile.close()
+	writeFile = open(lowerFile, 'w')
+
+	for word in wordsInFile:
+		#print (word.lower())
+		writeFile.write(word.lower())
+	writeFile.close()
+
+
+'''
 def cleanGarbage(inputFile, comparisonFile):
-	possibleNotWords = open((inputFile), 'w')
-	englishWords = open
+	actualWords = open(comaprisonFile, 'r')
+	possibleNotWords = open((inputFile), 'rw')
+	actualWordsList = actualWords.readlines()
+	possibleNotWordsList = possibleNotWords.readlines()
+
+	#####Binary Search Tree to remove real words from the fake words
+	for possibleNotWord in possibleNotWordsList:	
+		start = actualWords[int(len(actualWords)/2)]#will round down so can be missing one if odd number
+		if (possibleNotWord[0:1] == start[0:1]):	#first letter equal
+
+		if (possibleNotWord[0:1] > start[0:1]):		#
+
+
+
 	possibleNotWords.close()
+	actualWords.close()
 	return 0
 
-genGarbage(50)
-removePunct('allWords.txt', 'parsedWords.txt', nonChars)
+'''
+'''
+test = ['hello', 'HELLO']
+for testWord in range(0,len(test)):
+	test[testWord] = test[testWord].lower()
+print (test)
+'''
+fileToLower('parsedWords.txt')
+genGarbage(200)
+#removePunct('allWords.txt', 'parsedWords.txt', nonChars)
