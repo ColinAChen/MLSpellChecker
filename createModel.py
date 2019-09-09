@@ -57,7 +57,28 @@ def parseData (inputFile, classLabel):
 		x.append(wordCorrected)
 		y.append(classLabel)
 	return x, y
+def parseDataSimple(inputFile, classLabel):
+	x = []
+	y = []
+
+
+	fileToParse = open(inputFile, 'r')
+	words = fileToParse.readlines()#list of words
+
+	for word in words:
+		#print(word)
+		wordCorrected = []#list to hold each value of character ascii
+		char = 0
+		#rebuild each string, remove new line characters and add null terminating character if the word is less than 7 letters
+		while(char<7):
+			wordCorrected.append(ord(word[char:char+1]))
+			char +=1
+		x.append(wordCorrected)
+		y.append(classLabel)
+	return x,y
 def loadData():
+	#xWords, yWords = parseData('fourLetterWords.txt', 1)
+	#xNotWords, yNotWords = parseData('notFourWords.txt', 0)
 	xWords, yWords = parseData('scrambledParsed.txt', 1)
 	xNotWords, yNotWords = parseData('notWords.txt', 0)
 
@@ -79,7 +100,7 @@ def kerasModel(maxWordLength):
 	model.add(Dense(1, kernel_initializer='normal', activation='sigmoid'))
 	# Compile model
 	
-	model.save('spellCheckerModel3.h5')
+	model.save('layerTest.h5')
 	return model
 
 #parseData('parsedWords', 'real')
@@ -87,7 +108,9 @@ def kerasModel(maxWordLength):
 def create_baseline():
 	# create model
 	model = Sequential()
-	model.add(Dense(60, input_dim=60, kernel_initializer='normal', activation='relu'))
+	model.add(Dense(200, input_dim=7, kernel_initializer='normal', activation='relu'))
+
+	#model.add(Dense(50, input_dim=50, kernel_initializer='normal', activation='relu'))
 	model.add(Dense(1, kernel_initializer='normal', activation='sigmoid'))
 	# Compile model
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -105,7 +128,7 @@ rand_state = np.random.randint(0, 100)
 X_train, X_test, y_train, y_test = train_test_split(scaled_X, y, test_size=0.2, random_state=rand_state)
 model = kerasModel(7)
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-history = model.fit(X_train, y_train, nb_epoch=10, validation_split=0.1)
+history = model.fit(X_train, y_train, nb_epoch=20, validation_split=0.1)
 metrics = model.evaluate(X_test, y_test)
 for metric_i in range(len(model.metrics_names)):
     metric_name = model.metrics_names[metric_i]

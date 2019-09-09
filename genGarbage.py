@@ -3,7 +3,9 @@ import random
 import time
 
 letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','m','o','p','q','r','s','t','u','v','w','x','y','z']
-wordLength = [2,8]
+vowels = ['a','e','i','o','u']
+consonants = ['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z']
+wordLength = [7,7]
 nonChars = ['0','1','2','3','4','5','6','7','8','9','.',',','-','&','/','\'']
 def randChar(lettersList):
 	return lettersList[random.randint(0,len(letters) - 1)]	
@@ -14,23 +16,40 @@ def randWord(letterList,wordLengths):
 		word += randChar(letterList)
 	return word
 
-def genGarbage(numGarbage):
+def genGarbage():
 
-	realWordFile = open("parsedWords.txt", "r")
+	realWordFile = open("sevenLetterWords.txt", "r")
 	realWords = realWordFile.readlines()
+	numWords = len(realWords)
 	realWordFile.close()
-	outputFile = open("notWords.txt","w+")
-	print (realWords[0:20])
-	for word in range(0,numGarbage):
+	print ("Generating", numWords)
+	outputFile = open("notSevenWords.txt","w+")
+	for word in range(0,numWords):
 		#write a word to the file
 		wordToAdd = randWord(letters, wordLength) + "\n"
 		while (wordToAdd in realWords):
-			print ('created a real word!', wordToAdd)
+			#print ('created a real word!', wordToAdd)
 			wordToAdd = randWord(letters, wordLength) + "\n"
 
 		outputFile.write(randWord(letters, wordLength) + "\n")
 
 	outputFile.close()
+def genExclusiveRand():
+	word=''
+	if (random.randint(0,len(letters)) > len(vowels)):
+		#make a vowel only word
+		for letter in range(0,random.randint(wordLengths[0],wordLengths[1])):
+			word += randChar(vowels)
+	else:
+		for letter in range(0,random.randint(wordLengths[0],wordLengths[1])):
+			word += randChar(consonants)
+
+def genExclusiveGarbage():
+	'''
+	Generates fake words with only vowels or only consonants
+	'''
+	with open('exclusiveNotWords.txt') as file:
+		file.write(randWord)
 
 def removePunct(inputFile, outputFile, badChars):
 	wordFile = open(inputFile, 'r')
@@ -40,7 +59,7 @@ def removePunct(inputFile, outputFile, badChars):
 	time.sleep(2)
 	word = 0
 	while (word < len(words)):
-		if (len(words[word]) > 8):
+		if (len(words[word]) > 8 or len(words[word] < 3)):
 			print('removing', words[word])
 			words.remove(words[word])
 			word -= 1
@@ -103,6 +122,8 @@ for testWord in range(0,len(test)):
 print (test)
 '''
 #fileToLower('parsedWords.txt')
-genGarbage(200)
+#removePunct()
+if __name__ == '__main__':
+	genGarbage()
 
 #removePunct('allWords.txt', 'parsedWords.txt', nonChars)
