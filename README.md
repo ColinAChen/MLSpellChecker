@@ -16,7 +16,7 @@ I created fake words by choosing a random word length between four and seven, th
 #### Training
 Each word is represented as an input vector of length seven. Words with less than seven letters are padded with zeroes. I tried an individual network for different lengths but found the highest accuracy with all word lengths combined.
 
-I modified a [https://machinelearningmastery.com/binary-classification-tutorial-with-the-keras-deep-learning-library/] (binary classifier). 
+I modified a [binary classifier](https://machinelearningmastery.com/binary-classification-tutorial-with-the-keras-deep-learning-library/). 
 
 ## Results
 My current highest accuracy is 71 percent. This model misidentified words such as "hello" making it useless for this application.
